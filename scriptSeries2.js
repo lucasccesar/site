@@ -43,6 +43,10 @@ function showTvs(data) {
         <h3>${name}</h3>
         <span class="${getColor(vote_average)}">${vote_average}</span>
         </div>
+        <div id="selects">
+        <select id="selectSeason${id}" class="select" onchange="seasonInfo(parentElement.parentElement.id)"></select>
+        <select id="selectEpisode${id}" class="select"></select>
+        </div>
         `;
         
         main.appendChild(tvEl);
@@ -58,6 +62,16 @@ function showTvs(data) {
         imagem.addEventListener("mouseenter", enter)
         imagem.addEventListener("mouseleave", leave)
         imagem.addEventListener('click', abrir);
+        
+        var select1 = document.getElementById(`selectSeason${id}`);
+
+        for (i = 0; i < tvInformation.last_episode_to_air.season_number; i++) {
+            var option = document.createElement('option');
+            option.value = `${i + 1}`;
+            option.innerHTML = `Temporada ${i + 1}`;
+            select1.appendChild(option);
+        }
+        var seasonInformation = await seasonInfo(id);
     });
 }
 
@@ -67,6 +81,21 @@ async function tvInfo(id) {
         .catch((err) => console.error(err));
 
     return x;
+}
+
+async function seasonInfo(id) {
+    document.getElementById(`selectEpisode${id}`).innerHTML = '';
+    var seasonNum = document.getElementById(`selectSeason${id}`).value;
+    var select2 = document.getElementById(`selectEpisode${id}`);
+    var y = await fetch(`https://api.themoviedb.org/3/tv/${id}/season/${seasonNum}?language=en-US&${API_KEY}`)
+        .then((response) => response.json())
+        .catch((err) => console.error(err));
+    for (i = 0; i < y.episodes.length; i++) {
+        var option = document.createElement('option');
+        option.value = `${i + 1}`;
+        option.innerHTML = `Episódio ${i + 1}`;
+        select2.appendChild(option);
+    }
 }
 
 function getColor(vote) {
@@ -90,10 +119,12 @@ form.addEventListener('submit', (e) => {
     }
 });
 
-function abrir(event) {
-    movieId = event.target.offsetParent.id;
-    site = "assistirSeries.html?id=" + movieId;
-    window.location.href = site;
+function abrir(event){
+    tvId = event.target.offsetParent.id
+    var temporada = document.getElementById(`selectSeason${tvId}`).value;
+    var episodio = document.getElementById(`selectEpisode${tvId}`).value;
+    site = vidsrc + tvId + '/' + temporada + '/' + episodio;
+    window.location.href = site
 }
 
 function enter(event){
@@ -115,18 +146,3 @@ function leave(event){
     var childDiv = document.querySelector(".childDiv")
     div.removeChild(childDiv)
 }
-
-/* async function seasonInfo(id) {
-    document.getElementById(`selectEpisode${id}`).innerHTML = '';
-    var seasonNum = document.getElementById(`selectSeason${id}`).value;
-    var select2 = document.getElementById(`selectEpisode${id}`);
-    var y = await fetch(`https://api.themoviedb.org/3/tv/${id}/season/${seasonNum}?language=en-US&${API_KEY}`)
-        .then((response) => response.json())
-        .catch((err) => console.error(err));
-    for (i = 0; i < y.episodes.length; i++) {
-        var option = document.createElement('option');
-        option.value = `${i + 1}`;
-        option.innerHTML = `Episódio ${i + 1}`;
-        select2.appendChild(option);
-    }
-} */
