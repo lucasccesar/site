@@ -2,6 +2,8 @@
     margin: 0;
     color: white;
     font-family: 'Roboto Condensed', sans-serif;
+    text-decoration: none;
+    scroll-behavior: smooth;
 }
 
 body {
@@ -100,6 +102,9 @@ main {
     border-radius: 20px;
     border: none;
     background-color: #38a935;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #play:hover{
@@ -139,6 +144,104 @@ main {
 
 .hidden {
     visibility: hidden;
+}
+
+.anchor{
+    display: block;
+    height: 240px; /*same height as header*/
+    margin-top: -240px; /*same height as header*/
+    visibility: hidden;
+}
+
+select{
+    background-color: #05151E;
+    color: #404d53;
+    border: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+option{
+    color: #404d53;
+    border: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+#btnEp{
+    display: flex;
+}
+
+button{
+    width: min-content;
+    background-color: rgba(255, 255, 255, 0);
+    border: none;
+    cursor: pointer;
+}
+
+#episodes{
+    display: flex;
+    flex-flow: row nowrap;
+    overflow-x: auto;
+    overflow: hidden;
+    gap: 25px;
+}
+
+.episodesDiv{
+    min-width: 100%;
+    height: 200px;
+    display: flex;
+    justify-content: space-between;
+    height: max-content;
+}
+
+.episodesDivUltimo{
+    min-width: 100%;
+    display: flex;
+    gap: 10px;
+    justify-content: normal;
+}
+
+.episode{
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.episodeImg{
+    aspect-ratio: 1556 / 875;
+    height: 200px;
+    display: flex;
+    flex-direction: row;
+    background-size: cover;
+    border-radius: 10px 10px 0 0;
+    transition: 300ms;
+}
+
+.episodeInfo{
+    height: max-content;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #040f16;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+    border-radius: 0 0 10px 10px;
+}
+
+.episodeInfoClass{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+#playEp{
+    font-size: 40px;
 }
 
 .description {
