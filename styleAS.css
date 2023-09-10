@@ -209,10 +209,12 @@ button{
     display: flex;
     flex-direction: column;
     cursor: pointer;
+    width: min-content;
 }
 
 .episodeImg{
     aspect-ratio: 1556 / 875;
+    width: 355.66px;
     height: 200px;
     display: flex;
     flex-direction: row;
@@ -242,6 +244,10 @@ button{
 
 #playEp{
     font-size: 40px;
+}
+
+.epNum{
+    max-width: 70%;
 }
 
 .description {
