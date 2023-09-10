@@ -27,7 +27,6 @@ function showMovies(data) {
 
     data.forEach((movie) => {
         const { title, poster_path, vote_average, id } = movie;
-        console.log(poster_path)
         const movieEl = document.createElement('div');
         movieEl.classList.add('movie');
         movieEl.classList.add('gradient-border');
@@ -45,13 +44,11 @@ function showMovies(data) {
         main.appendChild(movieEl);
 
         var imgId = document.getElementById(`img${id}`);
-        console.log(imgId);
         imgId.style.backgroundImage = `url("${IMG_URL + poster_path}")`;
         imgId.style.backgroundSize = `cover`;
         imgId.addEventListener('click', abrir);
 
         var imagem = document.getElementById(`img${id}`);
-        console.log(imagem);
         imagem.addEventListener('mouseenter', enter);
         imagem.addEventListener('mouseleave', leave);
     });
@@ -85,6 +82,7 @@ function abrir(event) {
 
 function enter(event) {
     var div = event.target;
+    console.log(div)
     var childDiv = document.createElement('div');
     childDiv.style.zIndex = '2';
     childDiv.classList.add('childDiv');
