@@ -223,16 +223,18 @@ async function seasonFunc() {
                     divInfo.innerHTML = `
                     <span class="material-symbols-outlined" id="playEp">play_circle</span>
                     <div class="episodeInfoClass">
-                    <p>EP${k + count + 1} - ${episodeInfo.name}</p>
+                    <p class="epNum">EP${k + count + 1} - ${episodeInfo.name}</p>
                     <p>${episodeInfo.runtime} min</p>
                     </div>
                     
                     `;
                     divEp.appendChild(divInfo);
                 }
-                divCountFloat = (divCountFloat - 1).toFixed(1);
+                divCountFloat = (divCountFloat - 1).toFixed(2);
             } else {
+                console.log(divCountFloat*4)
                 for (let k = 0; k < divCountFloat * 4; k++) {
+                    console.log(k < divCountFloat * 4, k, divCountFloat)
                     var episodeInfo = await fetch(`https://api.themoviedb.org/3/tv/${movieId}/season/${seasons.value}/episode/${k + count + 1}?language=en-US`, options).then((response) => response.json());
                     console.log(episodeInfo);
                     let divEp = document.createElement('div');
@@ -253,7 +255,7 @@ async function seasonFunc() {
                     divInfo.innerHTML = `
                     <span class="material-symbols-outlined" id="playEp">play_circle</span>
                     <div class="episodeInfoClass">
-                    <p>EP${k + count + 1} - ${episodeInfo.name}</p>
+                    <p class="epNum">EP${k + count + 1} - ${episodeInfo.name}</p>
                     <p>${episodeInfo.runtime} min</p>
                     </div>
                     
@@ -295,14 +297,14 @@ async function seasonFunc() {
                     divInfo.innerHTML = `
                     <span class="material-symbols-outlined" id="playEp">play_circle</span>
                     <div class="episodeInfoClass">
-                    <p>EP${k + count + 1} - ${episodeInfo.name}</p>
+                    <p class="epNum">EP${k + count + 1} - ${episodeInfo.name}</p>
                     <p>${episodeInfo.runtime} min</p>
                     </div>
                     
                     `;
                     divEp.appendChild(divInfo);
                 }
-                divCountFloat = (divCountFloat - 1).toFixed(1);
+                divCountFloat = (divCountFloat - 1).toFixed(2);
             } else {
                 for (let k = 0; k < divCountFloat * 4; k++) {
                     var episodeInfo = await fetch(`https://api.themoviedb.org/3/tv/${movieId}/season/1/episode/${k + count + 1}?language=en-US`, options).then((response) => response.json());
@@ -325,7 +327,7 @@ async function seasonFunc() {
                     divInfo.innerHTML = `
                     <span class="material-symbols-outlined" id="playEp">play_circle</span>
                     <div class="episodeInfoClass">
-                    <p>EP${k + count + 1} - ${episodeInfo.name}</p>
+                    <p class="epNum">EP${k + count + 1} - ${episodeInfo.name}</p>
                     <p>${episodeInfo.runtime} min</p>
                     </div>
                     
