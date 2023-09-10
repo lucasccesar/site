@@ -38,8 +38,9 @@ var current = 0;
 const seasons = document.getElementById('seasons');
 const episodes = document.getElementById('episodes');
 var divCount = 0;
-var episodesCount = 0
-var divCountFloat = 0
+var episodesCount = 0;
+var divCountFloat = 0;
+var epNum = 0;
 
 async function main() {
     var info = await fetch(`https://api.themoviedb.org/3/tv/${movieId}?language=en-US`, options).then((response) => response.json());
@@ -188,150 +189,158 @@ async function main() {
 main();
 
 async function seasonFunc() {
-    current = 0
+    current = 0;
     episodes.innerHTML = '';
     if (seasons.value != '') {
         var seasonInfo = await fetch(`https://api.themoviedb.org/3/tv/${movieId}/season/${seasons.value}?language=en-US`, options).then((response) => response.json());
-        console.log(seasonInfo)
-        episodesCount = seasonInfo.episodes.length
+        console.log(seasonInfo);
+        episodesCount = seasonInfo.episodes.length;
         divCount = Math.ceil(episodesCount / 4);
         divCountFloat = episodesCount / 4;
-        var count = 0
+        var count = 0;
         for (let i = 0; i < divCount; i++) {
             let div = document.createElement('div');
             div.classList.add('episodesDiv');
             episodes.appendChild(div);
-            if(divCountFloat>1){
-                for(let k = 0; k<4; k++){
-                    var episodeInfo = await fetch(`https://api.themoviedb.org/3/tv/${movieId}/season/${seasons.value}/episode/${k+count+1}?language=en-US`, options).then(response => response.json())
-                    console.log(episodeInfo)
-                    let divEp = document.createElement("div")
-                    divEp.addEventListener("mouseenter", hover)
-                    divEp.addEventListener("mouseleave", leave)
-                    divEp.classList.add("episode")
-                    let divImg = document.createElement("div")
-                    let divInfo = document.createElement("div")
-                    divImg.style.backgroundImage = `url('${imgUrl + episodeInfo.still_path}')`
-                    divImg.classList.add("episodeImg")
-                    divImg.style.filter = "grayscale(70%)";
-                    divEp.appendChild(divImg)
-                    div.appendChild(divEp)
-                    divInfo.classList.add("episodeInfo")
+            if (divCountFloat > 1) {
+                for (let k = 0; k < 4; k++) {
+                    var episodeInfo = await fetch(`https://api.themoviedb.org/3/tv/${movieId}/season/${seasons.value}/episode/${k + count + 1}?language=en-US`, options).then((response) => response.json());
+                    console.log(episodeInfo);
+                    let divEp = document.createElement('div');
+                    divEp.id = `${k + count + 1}`;
+                    divEp.addEventListener('mouseenter', hover);
+                    divEp.addEventListener('mouseleave', leave);
+                    divEp.addEventListener('click', abrir);
+                    divEp.classList.add('episode');
+                    let divImg = document.createElement('div');
+                    let divInfo = document.createElement('div');
+                    divImg.style.backgroundImage = `url('${imgUrl + episodeInfo.still_path}')`;
+                    divImg.classList.add('episodeImg');
+                    divImg.style.filter = 'grayscale(70%)';
+                    divEp.appendChild(divImg);
+                    div.appendChild(divEp);
+                    divInfo.classList.add('episodeInfo');
                     divInfo.innerHTML = `
                     <span class="material-symbols-outlined" id="playEp">play_circle</span>
                     <div class="episodeInfoClass">
-                    <p>EP${k+count+1} - ${episodeInfo.name}</p>
+                    <p>EP${k + count + 1} - ${episodeInfo.name}</p>
                     <p>${episodeInfo.runtime} min</p>
                     </div>
                     
-                    `
-                    divEp.appendChild(divInfo)
+                    `;
+                    divEp.appendChild(divInfo);
                 }
-                divCountFloat = (divCountFloat - 1).toFixed(1)
-            } else{
-                for(let k = 0; k<divCountFloat*4; k++){
-                    var episodeInfo = await fetch(`https://api.themoviedb.org/3/tv/${movieId}/season/${seasons.value}/episode/${k+count+1}?language=en-US`, options).then(response => response.json())
-                    console.log(episodeInfo)
-                    let divEp = document.createElement("div")
-                    divEp.addEventListener("mouseenter", hover)
-                    divEp.addEventListener("mouseleave", leave)
-                    divEp.classList.add("episode")
-                    let divImg = document.createElement("div")
-                    let divInfo = document.createElement("div")
-                    divImg.style.backgroundImage = `url('${imgUrl + episodeInfo.still_path}')`
-                    divImg.classList.add("episodeImg")
-                    divImg.style.filter = "grayscale(70%)";
-                    divEp.appendChild(divImg)
-                    div.appendChild(divEp)
-                    divInfo.classList.add("episodeInfo")
+                divCountFloat = (divCountFloat - 1).toFixed(1);
+            } else {
+                for (let k = 0; k < divCountFloat * 4; k++) {
+                    var episodeInfo = await fetch(`https://api.themoviedb.org/3/tv/${movieId}/season/${seasons.value}/episode/${k + count + 1}?language=en-US`, options).then((response) => response.json());
+                    console.log(episodeInfo);
+                    let divEp = document.createElement('div');
+                    divEp.id = `${k + count + 1}`;
+                    divEp.addEventListener('mouseenter', hover);
+                    divEp.addEventListener('mouseleave', leave);
+                    divEp.addEventListener('click', abrir);
+                    divEp.classList.add('episode');
+                    let divImg = document.createElement('div');
+                    let divInfo = document.createElement('div');
+                    divImg.style.backgroundImage = `url('${imgUrl + episodeInfo.still_path}')`;
+                    divImg.classList.add('episodeImg');
+                    divImg.style.filter = 'grayscale(70%)';
+                    divEp.appendChild(divImg);
+                    div.appendChild(divEp);
+                    divInfo.classList.add('episodeInfo');
                     div.classList.add('episodesDivUltimo');
                     divInfo.innerHTML = `
                     <span class="material-symbols-outlined" id="playEp">play_circle</span>
                     <div class="episodeInfoClass">
-                    <p>EP${k+count+1} - ${episodeInfo.name}</p>
+                    <p>EP${k + count + 1} - ${episodeInfo.name}</p>
                     <p>${episodeInfo.runtime} min</p>
                     </div>
                     
-                    `
-                    divEp.appendChild(divInfo)
+                    `;
+                    divEp.appendChild(divInfo);
                 }
             }
-            count += 4
+            count += 4;
         }
     } else {
         var seasonInfo = await fetch(`https://api.themoviedb.org/3/tv/${movieId}/season/1?language=en-US`, options).then((response) => response.json());
-        console.log(seasonInfo)
-        episodesCount = seasonInfo.episodes.length
+        console.log(seasonInfo);
+        episodesCount = seasonInfo.episodes.length;
         divCount = Math.ceil(episodesCount / 4);
         divCountFloat = episodesCount / 4;
-        var count = 0
+        var count = 0;
         for (let i = 0; i < divCount; i++) {
             let div = document.createElement('div');
             div.classList.add('episodesDiv');
             episodes.appendChild(div);
-            if(divCountFloat>1){
-                for(let k = 0; k<4; k++){
-                    var episodeInfo = await fetch(`https://api.themoviedb.org/3/tv/${movieId}/season/1/episode/${k+count+1}?language=en-US`, options).then(response => response.json())
-                    console.log(episodeInfo.runtime)
-                    let divEp = document.createElement("div")
-                    divEp.addEventListener("mouseenter", hover)
-                    divEp.addEventListener("mouseleave", leave)
-                    divEp.classList.add("episode")
-                    let divImg = document.createElement("div")
-                    let divInfo = document.createElement("div")
-                    divImg.style.backgroundImage = `url('${imgUrl + episodeInfo.still_path}')`
-                    divImg.classList.add("episodeImg")
-                    divImg.style.filter = "grayscale(70%)";
-                    divEp.appendChild(divImg)
-                    div.appendChild(divEp)
-                    divInfo.classList.add("episodeInfo")
+            if (divCountFloat > 1) {
+                for (let k = 0; k < 4; k++) {
+                    var episodeInfo = await fetch(`https://api.themoviedb.org/3/tv/${movieId}/season/1/episode/${k + count + 1}?language=en-US`, options).then((response) => response.json());
+                    console.log(episodeInfo.runtime);
+                    let divEp = document.createElement('div');
+                    divEp.id = `${k + count + 1}`;
+                    divEp.addEventListener('mouseenter', hover);
+                    divEp.addEventListener('mouseleave', leave);
+                    divEp.addEventListener('click', abrir);
+                    divEp.classList.add('episode');
+                    let divImg = document.createElement('div');
+                    let divInfo = document.createElement('div');
+                    divImg.style.backgroundImage = `url('${imgUrl + episodeInfo.still_path}')`;
+                    divImg.classList.add('episodeImg');
+                    divImg.style.filter = 'grayscale(70%)';
+                    divEp.appendChild(divImg);
+                    div.appendChild(divEp);
+                    divInfo.classList.add('episodeInfo');
                     divInfo.innerHTML = `
                     <span class="material-symbols-outlined" id="playEp">play_circle</span>
                     <div class="episodeInfoClass">
-                    <p>EP${k+count+1} - ${episodeInfo.name}</p>
+                    <p>EP${k + count + 1} - ${episodeInfo.name}</p>
                     <p>${episodeInfo.runtime} min</p>
                     </div>
                     
-                    `
-                    divEp.appendChild(divInfo)
+                    `;
+                    divEp.appendChild(divInfo);
                 }
-                divCountFloat = (divCountFloat - 1).toFixed(1)
-            } else{
-                for(let k = 0; k<divCountFloat*4; k++){
-                    var episodeInfo = await fetch(`https://api.themoviedb.org/3/tv/${movieId}/season/1/episode/${k+count+1}?language=en-US`, options).then(response => response.json())
-                    console.log(episodeInfo)
-                    let divEp = document.createElement("div")
-                    divEp.addEventListener("mouseenter", hover)
-                    divEp.addEventListener("mouseleave", leave)
-                    divEp.classList.add("episode")
-                    let divImg = document.createElement("div")
-                    let divInfo = document.createElement("div")
-                    divImg.style.backgroundImage = `url('${imgUrl + episodeInfo.still_path}')`
-                    divImg.classList.add("episodeImg")
-                    divImg.style.filter = "grayscale(70%)";
-                    divEp.appendChild(divImg)
-                    div.appendChild(divEp)
-                    divInfo.classList.add("episodeInfo")
+                divCountFloat = (divCountFloat - 1).toFixed(1);
+            } else {
+                for (let k = 0; k < divCountFloat * 4; k++) {
+                    var episodeInfo = await fetch(`https://api.themoviedb.org/3/tv/${movieId}/season/1/episode/${k + count + 1}?language=en-US`, options).then((response) => response.json());
+                    console.log(episodeInfo);
+                    let divEp = document.createElement('div');
+                    divEp.id = `${k + count + 1}`;
+                    divEp.addEventListener('mouseenter', hover);
+                    divEp.addEventListener('mouseleave', leave);
+                    divEp.addEventListener('click', abrir);
+                    divEp.classList.add('episode');
+                    let divImg = document.createElement('div');
+                    let divInfo = document.createElement('div');
+                    divImg.style.backgroundImage = `url('${imgUrl + episodeInfo.still_path}')`;
+                    divImg.classList.add('episodeImg');
+                    divImg.style.filter = 'grayscale(70%)';
+                    divEp.appendChild(divImg);
+                    div.appendChild(divEp);
+                    divInfo.classList.add('episodeInfo');
                     div.classList.add('episodesDivUltimo');
                     divInfo.innerHTML = `
                     <span class="material-symbols-outlined" id="playEp">play_circle</span>
                     <div class="episodeInfoClass">
-                    <p>EP${k+count+1} - ${episodeInfo.name}</p>
+                    <p>EP${k + count + 1} - ${episodeInfo.name}</p>
                     <p>${episodeInfo.runtime} min</p>
                     </div>
                     
-                    `
-                    divEp.appendChild(divInfo)
+                    `;
+                    divEp.appendChild(divInfo);
                 }
             }
-            count += 4
+            count += 4;
         }
     }
 }
 
 function proximo() {
     var episodesDiv = document.querySelectorAll('.episodesDiv');
-    if (current < divCount-1) {
+    if (current < divCount - 1) {
         current += 1;
         episodesDiv[current].scrollIntoView({
             behavior: 'instant',
@@ -369,12 +378,27 @@ function abrirSimilar(event) {
     window.location.href = site;
 }
 
-function hover(event){
-    event.target.children[0].style.filter = "grayscale(0%)"
+function hover(event) {
+    event.target.children[0].style.filter = 'grayscale(0%)';
 }
 
-function leave(event){
-    event.target.children[0].style.filter = "grayscale(70%)"
+function leave(event) {
+    event.target.children[0].style.filter = 'grayscale(70%)';
+}
+
+function abrir(event) {
+    window.scrollTo(0, bgImg);
+    if (event.target.classList[0] == 'episodeImg' || event.target.classList[0] == 'episodeInfo') {
+        epNum = event.target.parentElement.id;
+    } else if (event.target.nodeName == 'SPAN' || event.target.nodeName == 'DIV') {
+        epNum = event.target.parentElement.parentElement.id;
+    } else if (event.target.nodeName == 'P') {
+        epNum = event.target.parentElement.parentElement.parentElement.id;
+    }
+    iframe.src = `https://vidsrc.to/embed/tv/${movieId}/${seasons.value}/${epNum}`;
+    bgImg.classList.replace('fechadoImg', 'abertoImg');
+    iframe.classList.replace('iframeFechado', 'iframeAberto');
+    mainHtml.classList.replace('top200', 'top');
 }
 
 /* async function seasonInfo(id) {
