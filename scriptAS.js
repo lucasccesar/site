@@ -208,18 +208,20 @@ async function seasonFunc() {
                     console.log(episodeInfo);
                     let divEp = document.createElement('div');
                     divEp.id = `${k + count + 1}`;
+                    divEp.addEventListener('mouseenter', hover);
+                    divEp.addEventListener('mouseleave', leave);
                     divEp.addEventListener('click', abrir);
                     divEp.classList.add('episode');
                     let divImg = document.createElement('div');
                     let divInfo = document.createElement('div');
                     divImg.style.backgroundImage = `url('${imgUrl + episodeInfo.still_path}')`;
                     divImg.classList.add('episodeImg');
-                    divImg.addEventListener("mouseenter", hoverImg)
-                    divImg.addEventListener("mouseleave", leaveImg)
+                    divImg.style.filter = 'grayscale(70%)';
                     divEp.appendChild(divImg);
                     div.appendChild(divEp);
                     divInfo.classList.add('episodeInfo');
                     divInfo.innerHTML = `
+                    <span class="material-symbols-outlined" id="playEp">play_circle</span>
                     <div class="episodeInfoClass">
                     <p class="epNum">EP${k + count + 1} - ${episodeInfo.name}</p>
                     <p>${episodeInfo.runtime} min</p>
@@ -237,19 +239,21 @@ async function seasonFunc() {
                     console.log(episodeInfo);
                     let divEp = document.createElement('div');
                     divEp.id = `${k + count + 1}`;
+                    divEp.addEventListener('mouseenter', hover);
+                    divEp.addEventListener('mouseleave', leave);
                     divEp.addEventListener('click', abrir);
                     divEp.classList.add('episode');
                     let divImg = document.createElement('div');
                     let divInfo = document.createElement('div');
                     divImg.style.backgroundImage = `url('${imgUrl + episodeInfo.still_path}')`;
                     divImg.classList.add('episodeImg');
-                    divImg.addEventListener("mouseenter", hoverImg)
-                    divImg.addEventListener("mouseleave", leaveImg)
+                    divImg.style.filter = 'grayscale(70%)';
                     divEp.appendChild(divImg);
                     div.appendChild(divEp);
                     divInfo.classList.add('episodeInfo');
                     div.classList.add('episodesDivUltimo');
                     divInfo.innerHTML = `
+                    <span class="material-symbols-outlined" id="playEp">play_circle</span>
                     <div class="episodeInfoClass">
                     <p class="epNum">EP${k + count + 1} - ${episodeInfo.name}</p>
                     <p>${episodeInfo.runtime} min</p>
@@ -278,18 +282,20 @@ async function seasonFunc() {
                     console.log(episodeInfo.runtime);
                     let divEp = document.createElement('div');
                     divEp.id = `${k + count + 1}`;
+                    divEp.addEventListener('mouseenter', hover);
+                    divEp.addEventListener('mouseleave', leave);
                     divEp.addEventListener('click', abrir);
                     divEp.classList.add('episode');
                     let divImg = document.createElement('div');
                     let divInfo = document.createElement('div');
                     divImg.style.backgroundImage = `url('${imgUrl + episodeInfo.still_path}')`;
                     divImg.classList.add('episodeImg');
-                    divImg.addEventListener("mouseenter", hoverImg)
-                    divImg.addEventListener("mouseleave", leaveImg)
+                    divImg.style.filter = 'grayscale(70%)';
                     divEp.appendChild(divImg);
                     div.appendChild(divEp);
                     divInfo.classList.add('episodeInfo');
                     divInfo.innerHTML = `
+                    <span class="material-symbols-outlined" id="playEp">play_circle</span>
                     <div class="episodeInfoClass">
                     <p class="epNum">EP${k + count + 1} - ${episodeInfo.name}</p>
                     <p>${episodeInfo.runtime} min</p>
@@ -305,19 +311,21 @@ async function seasonFunc() {
                     console.log(episodeInfo);
                     let divEp = document.createElement('div');
                     divEp.id = `${k + count + 1}`;
+                    divEp.addEventListener('mouseenter', hover);
+                    divEp.addEventListener('mouseleave', leave);
                     divEp.addEventListener('click', abrir);
                     divEp.classList.add('episode');
                     let divImg = document.createElement('div');
                     let divInfo = document.createElement('div');
                     divImg.style.backgroundImage = `url('${imgUrl + episodeInfo.still_path}')`;
                     divImg.classList.add('episodeImg');
-                    divImg.addEventListener("mouseenter", hoverImg)
-                    divImg.addEventListener("mouseleave", leaveImg)
+                    divImg.style.filter = 'grayscale(70%)';
                     divEp.appendChild(divImg);
                     div.appendChild(divEp);
                     divInfo.classList.add('episodeInfo');
                     div.classList.add('episodesDivUltimo');
                     divInfo.innerHTML = `
+                    <span class="material-symbols-outlined" id="playEp">play_circle</span>
                     <div class="episodeInfoClass">
                     <p class="epNum">EP${k + count + 1} - ${episodeInfo.name}</p>
                     <p>${episodeInfo.runtime} min</p>
@@ -372,25 +380,12 @@ function abrirSimilar(event) {
     window.location.href = site;
 }
 
-function hoverImg(event){
-    var div = event.target;
-    console.log(div)
-    var childDiv = document.createElement('div');
-    childDiv.style.zIndex = '2';
-    childDiv.classList.add('childDiv');
-    var play = document.createElement('span');
-    play.classList.add('material-symbols-outlined');
-    play.classList.add('play');
-    play.innerText = 'play_circle';
-    play.style.fontSize = '90px';
-    childDiv.appendChild(play);
-    div.appendChild(childDiv);
+function hover(event) {
+    event.target.children[0].style.filter = 'grayscale(0%)';
 }
 
-function leaveImg(event){
-    var div = event.target;
-    var childDiv = document.querySelector('.childDiv');
-    div.removeChild(childDiv);
+function leave(event) {
+    event.target.children[0].style.filter = 'grayscale(70%)';
 }
 
 function abrir(event) {

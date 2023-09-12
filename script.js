@@ -23,6 +23,8 @@ async function getMovies(url) {
 function showMovies(data) {
     main.innerHTML = '';
 
+    console.log(data)
+
     data.sort((a, b) => Number(b.popularity) - Number(a.popularity));
 
     data.forEach((movie) => {

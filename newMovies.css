@@ -1,0 +1,61 @@
+* {
+    margin: 0;
+}
+
+#upper {
+    position: relative;
+}
+
+#upper > #suggestions {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+}
+
+#suggestions {
+    height: min-content;
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    width: 65px;
+    height: 5px;
+    background-color: rgba(255,255,255, 0.3);
+    border-radius: 10px;
+    cursor: pointer;
+
+}
+
+.btnLoading{
+    height: 100%;
+    width: 50%;
+    background-color: rgba(255, 255, 255,1);
+    border-radius: 10px;
+}
+
+#movies {
+    display: flex;
+    flex-flow: row nowrap;
+    overflow-x: auto;
+    overflow: hidden;
+    position: relative;
+}
+
+#lower {
+    background-color: rgba(5, 21, 30, 1);
+    height: 1000px;
+}
+
+.fundo {
+    min-width: 100%;
+    height: max-content;
+}
+
+.filme {
+    width: 100%;
+    height: 70vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
