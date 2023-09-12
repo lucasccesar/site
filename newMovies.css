@@ -1,5 +1,6 @@
 * {
     margin: 0;
+    font-family: 'Roboto Condensed', sans-serif;
 }
 
 #upper {
@@ -17,21 +18,21 @@
     height: min-content;
     display: flex;
     gap: 10px;
+    margin: 0px 10% 2% 0px;
 }
 
 .btn {
-    width: 65px;
+    width: 75px;
     height: 5px;
-    background-color: rgba(255,255,255, 0.3);
+    background-color: rgba(255, 255, 255, 0.3);
     border-radius: 10px;
     cursor: pointer;
-
 }
 
-.btnLoading{
+.btnLoading {
     height: 100%;
     width: 50%;
-    background-color: rgba(255, 255, 255,1);
+    background-color: rgba(255, 255, 255, 1);
     border-radius: 10px;
 }
 
@@ -43,14 +44,57 @@
     position: relative;
 }
 
-#lower {
-    background-color: rgba(5, 21, 30, 1);
-    height: 1000px;
-}
-
 .fundo {
     min-width: 100%;
     height: max-content;
+}
+
+.info {
+    width: 80%;
+}
+
+.infoInner{
+    width: fit-content;
+    margin-bottom: 2%;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    background-color: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(5px);
+    padding: 20px;
+    border-radius: 20px;
+}
+
+.btnWatch{
+    border: none;
+    padding: 16px 60px;
+    font-weight: bold;
+    font-size: 20px;
+    border-radius: 100px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    width: max-content;
+}
+
+.btnWatch:hover{
+    background-color: rgb(209, 209, 209);
+}
+
+.description{
+    color: white;
+    width: 600px;
+}
+
+.title{
+    color: white;
+    font-weight: bold;
+    font-size: 60px;
+}
+
+#play_arrow{
+    font-size: 30px;
 }
 
 .filme {
@@ -58,4 +102,12 @@
     height: 70vh;
     background-repeat: no-repeat;
     background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+#lower {
+    background-color: rgba(5, 21, 30, 1);
+    height: 1000px;
 }
