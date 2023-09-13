@@ -101,13 +101,14 @@ async function mudar(event) {
 }
 
 function suggestion() {
-    /* console.log(window.scrollY) ---------------------------AQUI--------------------------------*/
-    ms++;
-    var loading = document.querySelector('.btnLoading');
-    loading.style.width = `${ms / 15}%`;
-    if (ms / 15 == 100) {
-        ms = 0;
-        trocar();
+    if(window.scrollY<50){
+        ms++;
+        var loading = document.querySelector('.btnLoading');
+        loading.style.width = `${ms / 15}%`;
+        if (ms / 15 == 100) {
+            ms = 0;
+            trocar();
+        }
     }
 }
 
