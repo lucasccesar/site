@@ -134,7 +134,7 @@ function trocar() {
             });
         }, 1000)
         current = 0;
-    } else if (loading.parentElement.nextElementSibling != null) {
+    } else if (loading.parentElement.nextElementSibling != null) { /* aaaaaaaaaaaaaa */
         console.log('aqui');
         loading.style.width = `0%`;
         loading.parentElement.nextElementSibling.firstElementChild.classList.add('btnLoading');
