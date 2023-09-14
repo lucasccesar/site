@@ -5,6 +5,7 @@
 
 body{
     overflow-x: hidden;
+    background-color: rgba(5, 21, 30, 1);
 }
 
 #upper {
@@ -118,6 +119,13 @@ body{
 }
 
 #lower {
-    background-color: rgba(5, 21, 30, 1);
     height: 1000px;
+    width: 80%;
+    margin: auto;
+    color: white;
+}
+
+#trending p {
+    font-size: 30px;
+    font-weight: bold;
 }

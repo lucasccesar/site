@@ -25,11 +25,12 @@ var current = 0;
 
 async function main() {
     var discover = await fetch(`${API_URL}`, options).then((response) => response.json());
+    var trending = await fetch(`${API_URL}`, options).then((response) => response.json());
+    console.log(trending);
     var discoverOrder = discover.results.sort((a, b) => Number(b.vote_count) - Number(a.vote_count));
     for (let i = discoverOrder.length; i > 4; i--) {
         discoverOrder.pop();
     }
-    console.log(discoverOrder);
 
     discoverOrder.forEach((movie) => {
         let fundo = document.createElement('div');
@@ -42,7 +43,7 @@ async function main() {
         <div class='infoInner'>
         <p class="title">${movie.original_title}</p>
         <p class="description">${movie.overview}</p>
-        <button class="btnWatch"><span class="material-symbols-rounded" id="play_arrow">play_arrow</span>Watch Movie</button>
+        <button class="btnWatch" data-id="${movie.id}"><span class="material-symbols-rounded" id="play_arrow">play_arrow</span>Watch Movie</button>
         </div>
         </div>
         `;
@@ -60,7 +61,7 @@ async function main() {
             <div class='infoInner'>
             <p class="title">${discoverOrder[0].original_title}</p>
             <p class="description">${discoverOrder[0].overview}</p>
-            <button class="btnWatch"><span class="material-symbols-rounded" id="play_arrow">play_arrow</span>Watch Movie</button>
+            <button class="btnWatch" data-id="${movie.id}"><span class="material-symbols-rounded" id="play_arrow">play_arrow</span>Watch Movie</button>
             </div>
             </div>
             `;
@@ -70,7 +71,20 @@ async function main() {
         }
     });
 
+    var btns = document.querySelectorAll(".btnWatch")
+    console.log(btns)
+    btns.forEach(btn => {
+        btn.addEventListener("click", openR)
+    });
+
     setInterval(suggestion, 1);
+}
+
+function openR(event){
+    console.log(event.target.dataset.id)
+    movieId = event.target.dataset.id;
+    site = "assistirFilmes.html?id=" + movieId;
+    window.location.href = site;
 }
 
 async function mudar(event) {
