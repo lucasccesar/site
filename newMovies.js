@@ -17,8 +17,11 @@ const body = document.querySelector("body")
 btns.forEach((e) => {
     e.addEventListener('click', mudar);
 });
+var width = body.offsetWidth
+var height = body.offsetHeight
 var ms = 0;
 var current = 0;
+
 
 async function main() {
     var discover = await fetch(`${API_URL}`, options).then((response) => response.json());
@@ -72,17 +75,15 @@ async function main() {
 
 async function mudar(event) {
     const fundos = document.querySelectorAll('.fundo');
+    console.log(fundos)
     let loading = document.querySelector('.btnLoading');
     console.log(event);
     console.log(event.target.classList);
     if (event.target.firstElementChild != null && event.target.firstElementChild.classList[0] != 'btnLoading') {
         for (let i = 0; i < 4; i++) {
             if (event.target == btns[i] || event.target.parentElement == btns[i]) {
-                fundos[i].scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'nearest',
-                    inline: 'start',
-                });
+                movies.classList.add("delay")
+                movies.style.transform = `translateX(-${width * i}px)`
                 current = i;
             }
             if (event.target == btns[i]) {
@@ -101,15 +102,23 @@ async function mudar(event) {
 }
 
 function suggestion() {
-    if(window.scrollY<50){
-        ms++;
-        var loading = document.querySelector('.btnLoading');
-        loading.style.width = `${ms / 15}%`;
-        if (ms / 15 == 100) {
-            ms = 0;
-            trocar();
-        }
+    width = body.offsetWidth
+    let movieSla = movies.getBoundingClientRect()
+    if(movieSla.left == -(width*4)){
+        let loading = document.querySelector('.btnLoading');
+        movies.classList.remove("delay")
+        loading.classList.remove('btnLoading');
+        movies.style.transform = `translateX(0px)`
+        btns[0].firstElementChild.classList.add('btnLoading');
     }
+    ms++;
+    var loading = document.querySelector('.btnLoading');
+    loading.style.width = `${ms / 15}%`;
+    if (ms / 15 == 100) {
+        ms = 0;
+        trocar();
+    }
+    
 }
 
 function trocar() {
@@ -119,31 +128,16 @@ function trocar() {
     if (current == 4) {
         btns[0].firstElementChild.classList.add('btnLoading');
         loading.classList.remove('btnLoading');
-        fundos[current].scrollIntoView({
-            behavior: 'smooth',
-            block: 'nearest',
-            inline: 'start',
-        });
-        setTimeout(()=>{
-            btns[0].firstElementChild.classList.add('btnLoading');
-            loading.classList.remove('btnLoading');
-            fundos[current].scrollIntoView({
-                behavior: 'instant',
-                block: 'nearest',
-                inline: 'start',
-            });
-        }, 1000)
+        movies.style.transform = `translateX(-${width * current}px)`
+        console.log("trocou")
         current = 0;
-    } else if (loading.parentElement.nextElementSibling != null) { /* aaaaaaaaaaa */
+    } else if (loading.parentElement.nextElementSibling != null) {
+        movies.classList.add("delay")
         console.log('aqui');
         loading.style.width = `0%`;
         loading.parentElement.nextElementSibling.firstElementChild.classList.add('btnLoading');
         loading.classList.remove('btnLoading');
-        fundos[current].scrollIntoView({
-            behavior: 'smooth',
-            block: 'nearest',
-            inline: 'start',
-        });
+        movies.style.transform = `translateX(-${width * current}px)`
     }
 }
 

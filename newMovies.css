@@ -3,6 +3,10 @@
     font-family: 'Roboto Condensed', sans-serif;
 }
 
+body{
+    overflow-x: hidden;
+}
+
 #upper {
     position: relative;
 }
@@ -39,9 +43,15 @@
 #movies {
     display: flex;
     flex-flow: row nowrap;
-    overflow-x: auto;
-    overflow: hidden;
     position: relative;
+}
+
+.delay{
+    transition: 1000ms;
+}
+
+.instant{
+    transition: 0;
 }
 
 .fundo {
