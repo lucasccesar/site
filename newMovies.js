@@ -21,12 +21,14 @@ var width = body.offsetWidth
 var height = body.offsetHeight
 var ms = 0;
 var current = 0;
+const trendingMovies = document.getElementById("trendingMovies")
 
 
 async function main() {
     var discover = await fetch(`${API_URL}`, options).then((response) => response.json());
-    var trending = await fetch(`${API_URL}`, options).then((response) => response.json());
-    console.log(trending);
+    var trendingObj = await fetch(`${API_URL}`, options).then((response) => response.json());
+    var trending = trendingObj.results;
+    console.log(trending); 
     var discoverOrder = discover.results.sort((a, b) => Number(b.vote_count) - Number(a.vote_count));
     for (let i = discoverOrder.length; i > 4; i--) {
         discoverOrder.pop();
@@ -69,6 +71,17 @@ async function main() {
             fundo.appendChild(filme);
             movies.appendChild(fundo);
         }
+    });
+
+    trending.forEach(movie => {
+        console.log(movie.original_title)
+        let div = document.createElement("div")
+        div.classList.add("movie")
+        div.innerHTML = `
+        <div class="movieBackdrop" style="background-image: url('${IMG_URL + movie.backdrop_path}')"></div>
+        <div class="movieInfo"><p class="title">${movie.title}</p><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#ffffff}</style><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg></div>
+        `
+        trendingMovies.appendChild(div)
     });
 
     var btns = document.querySelectorAll(".btnWatch")
