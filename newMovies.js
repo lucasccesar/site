@@ -134,7 +134,7 @@ function hoverLeave(event){
 function openR(event){
     console.log(event.target.dataset.id)
     movieId = event.target.dataset.id;
-    site = "assistirFilmes.html?id=" + movieId;
+    site = "assistirFilmes.html?id=" + movieId; /* aaaaaa */
     window.location.href = site;
 }
 
