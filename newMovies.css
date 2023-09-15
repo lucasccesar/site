@@ -128,7 +128,6 @@ body{
 
 #trendingMoviesBox{
     display: flex;
-    width: 1903px;
     position: relative;
     left: 50%;
     transform: translate(-50%);
@@ -138,8 +137,18 @@ body{
 .pass{
     min-width: 9%;
     border: none;
-    background-color: rgba(0, 0, 0, 0.5);
     z-index: 2;
+}
+
+.hidden{
+    background-color: rgba(0, 0, 0, 0);
+    transition: 200ms;
+}
+
+.visible{
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: 200ms;
+    cursor: pointer;
 }
 
 .centerText{
@@ -196,20 +205,11 @@ body{
     gap: 5px;
 }
 
-.trendingPartitions {
-    display: flex;
-    justify-content: space-between;
-    min-width: 80%;
-}
-
-.trendingPartitionsFirst{
-    margin-left: 10%;
-}
-
 #trendingMovies{
+    transition: 1s;
     display: flex;
     gap: 20px;
-    overflow: hidden;
+    margin-left: 10%;
 }
 
 .movie{

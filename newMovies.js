@@ -20,8 +20,22 @@ btns.forEach((e) => {
 var width = body.offsetWidth
 var height = body.offsetHeight
 var ms = 0;
-var current = 0;
+var currentSuggestion = 0;
+var currentTrending = 0;
+const trending = document.getElementById("trending")
 const trendingMovies = document.getElementById("trendingMovies")
+const trendingMoviesBox = document.getElementById("trendingMoviesBox")
+trendingMoviesBox.style.width = `${width}px`
+var next = document.querySelectorAll(".next")
+next.forEach(btn => {
+    btn.addEventListener("click", nextAction)
+});
+var previous = document.querySelectorAll(".previous")
+previous.forEach(btn => {
+    btn.addEventListener("click", previousAction)
+});
+trendingMoviesBox.addEventListener("mouseenter", hoverEnter)
+trendingMoviesBox.addEventListener("mouseleave", hoverLeave)
 
 
 async function main() {
@@ -73,23 +87,15 @@ async function main() {
         }
     });
 
-    for(let i = 0; i<trending.length/4; i++){
-        let div = document.createElement("div")
-        div.classList.add("trendingPartitions")
-        if(i==0){
-            div.classList.add("trendingPartitionsFirst")
-        }
-        for(let j = 0; j<4; j++){
-            let divMovies = document.createElement("div")
-            divMovies.classList.add("movie")
-            divMovies.innerHTML = `
-            <div class="movieBackdrop" style="background-image: url('${IMG_URL + trending[j+i*4].backdrop_path}')"></div>
-            <div class="movieInfo"><p class="title">${trending[j+i*4].title}</p><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#ffffff}</style><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg></div>
-            `
-            div.appendChild(divMovies)
-        }
-        trendingMovies.appendChild(div)
-    }
+    trending.forEach(movie => {
+        let divMovies = document.createElement("div")
+        divMovies.classList.add("movie")
+        divMovies.innerHTML = `
+        <div class="movieBackdrop" style="background-image: url('${IMG_URL + movie.backdrop_path}')"></div>
+        <div class="movieInfo"><p class="title">${movie.title}</p><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#ffffff}</style><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg></div>
+        `
+        trendingMovies.appendChild(divMovies)
+    });
 
     var btns = document.querySelectorAll(".btnWatch")
     console.log(btns)
@@ -98,6 +104,31 @@ async function main() {
     });
 
     setInterval(suggestion, 1);
+}
+
+function nextAction(event){
+    let move = ((80/100)*width)
+    console.log(move)
+    let movie = document.querySelector(".movie") 
+    let movieWidth = movie.offsetWidth
+    console.log(((move-(movieWidth*4))/3)+move)
+    move = (((move-(movieWidth*4))/3)+move)-4
+    event.target.offsetParent.children[1].style.transform = `translateX(-${move*(currentTrending+1)}px)`
+    currentTrending++
+}
+
+function hoverEnter(event){
+    if(currentTrending!=0){
+        event.target.children[0].classList.replace("hidden", "visible")
+    }
+    if(currentTrending<(event.target.children[1].children.length/4)-1){
+        event.target.children[2].classList.replace("hidden", "visible")
+    }
+}
+
+function hoverLeave(event){
+    event.target.children[0].classList.replace("visible", "hidden")
+    event.target.children[2].classList.replace("visible", "hidden")
 }
 
 function openR(event){
@@ -118,7 +149,7 @@ async function mudar(event) {
             if (event.target == btns[i] || event.target.parentElement == btns[i]) {
                 movies.classList.add("delay")
                 movies.style.transform = `translateX(-${width * i}px)`
-                current = i;
+                currentSuggestion = i;
             }
             if (event.target == btns[i]) {
                 event.target.firstElementChild.classList.add('btnLoading');
@@ -157,21 +188,21 @@ function suggestion() {
 
 function trocar() {
     const fundos = document.querySelectorAll('.fundo');
-    current++;
+    currentSuggestion++;
     let loading = document.querySelector('.btnLoading');
-    if (current == 4) {
+    if (currentSuggestion == 4) {
         btns[0].firstElementChild.classList.add('btnLoading');
         loading.classList.remove('btnLoading');
-        movies.style.transform = `translateX(-${width * current}px)`
+        movies.style.transform = `translateX(-${width * currentSuggestion}px)`
         console.log("trocou")
-        current = 0;
+        currentSuggestion = 0;
     } else if (loading.parentElement.nextElementSibling != null) {
         movies.classList.add("delay")
         console.log('aqui');
         loading.style.width = `0%`;
         loading.parentElement.nextElementSibling.firstElementChild.classList.add('btnLoading');
         loading.classList.remove('btnLoading');
-        movies.style.transform = `translateX(-${width * current}px)`
+        movies.style.transform = `translateX(-${width * currentSuggestion}px)`
     }
 }
 
