@@ -126,6 +126,43 @@ body{
     margin-top: 60px;
 }
 
+#trendingMoviesBox{
+    display: flex;
+    width: 1903px;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%);
+    margin-top: 20px;
+}
+
+.pass{
+    min-width: 9%;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2;
+}
+
+.centerText{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+#trendingMoviesBox > .preview{
+    position: absolute;
+    height: 100%;
+    left: 0;
+    border-radius: 0px 10px 10px 0px;
+}
+
+#trendingMoviesBox > .next{
+    position: absolute;
+    height: 100%;
+    right: 0;
+    border-radius: 10px 0px 0px 10px;
+}
+
+
 
 #trending p {
     font-size: 30px;
@@ -159,10 +196,20 @@ body{
     gap: 5px;
 }
 
+.trendingPartitions {
+    display: flex;
+    justify-content: space-between;
+    min-width: 80%;
+}
+
+.trendingPartitionsFirst{
+    margin-left: 10%;
+}
+
 #trendingMovies{
     display: flex;
-    margin-top: 20px;
     gap: 20px;
+    overflow: hidden;
 }
 
 .movie{
@@ -173,17 +220,20 @@ body{
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 10px;
+    max-height: 47px;
+    box-sizing: border-box;
 }
 
 .movieBackdrop{
     aspect-ratio: 1485 / 835;
-    width: 350px;
+    width: 365px;
     background-size: cover;
     background-repeat: no-repeat;
     border-radius: 10px;
 }
 
 #trendingMovies p {
-    font-size: 25px;
+    font-size: 22px;
     font-weight: normal;
 }
