@@ -122,7 +122,7 @@ function hoverEnter(event){
         event.target.children[0].classList.replace("hidden", "visible")
     }
     if(currentTrending<(event.target.children[1].children.length/4)-1){
-        event.target.children[2].classList.replace("hidden", "visible")
+        event.target.children[2].classList.replace("hidden", "visible") /* a */
     }
 }
 
