@@ -37,6 +37,7 @@ previous.forEach((btn) => {
 trendingMoviesBox.addEventListener('mouseenter', hoverEnter);
 trendingMoviesBox.addEventListener('mouseleave', hoverLeave);
 var currentTrendingTranslate = 0;
+var resultsImgs = []
 
 async function main() {
     var discover = await fetch(`${API_URL}`, options).then((response) => response.json());
@@ -96,8 +97,19 @@ async function main() {
         for (let j = 0; j < 4; j++) {
             let divMovies = document.createElement('div');
             divMovies.classList.add('movie');
+            let movieImgCount = 0
+            let movieImg = await fetch(`https://api.themoviedb.org/3/movie/${trendingResults[j + i * 4].id}/images`, options).then((response) => response.json());
+            for(let i = 0; i < movieImg.backdrops.length; i ++){
+                if(movieImg.backdrops[i].iso_639_1 == 'en' && movieImgCount == 0){
+                    movieImgCount = 1
+                    movieImgPath = movieImg.backdrops[i].file_path
+                }
+            }
+            if(movieImgCount == 0){
+                movieImgPath = movieImg.backdrops[0].file_path
+            }
             divMovies.innerHTML = `
-            <div class="movieBackdrop" style="background-image: url('${IMG_URL + trendingResults[j + i * 4].backdrop_path}')"></div>
+            <div class="movieBackdrop" style="background-image: url('${IMG_URL + movieImgPath}')"></div>
             <div class="movieInfo"><p class="title">${
                 trendingResults[j + i * 4].title
             }</p><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#ffffff}</style><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg></div>
@@ -123,11 +135,11 @@ function nextAction(event) {
         console.log(currentTrendingTranslate);
         trendingMovies.style.transform = `translateX(${currentTrendingTranslate}px)`;
         currentTrending++;
-        if(currentTrending>0){
+        if (currentTrending > 0) {
             trendingMoviesBox.children[0].classList.replace('hidden', 'visible');
         }
-        if(currentTrending==trendingPartitions.length-1){
-            trendingMoviesBox.children[2].classList.replace('visible', 'hidden')
+        if (currentTrending == trendingPartitions.length - 1) {
+            trendingMoviesBox.children[2].classList.replace('visible', 'hidden');
         }
     }
 }
@@ -139,12 +151,12 @@ function previousAction(event) {
         console.log(currentTrendingTranslate);
         trendingMovies.style.transform = `translateX(${currentTrendingTranslate}px)`;
         currentTrending--;
-        console.log(currentTrending)
-        if(currentTrending<trendingPartitions.length-1){
+        console.log(currentTrending);
+        if (currentTrending < trendingPartitions.length - 1) {
             trendingMoviesBox.children[2].classList.replace('hidden', 'visible');
         }
-        if(currentTrending==0){
-            trendingMoviesBox.children[0].classList.replace('visible', 'hidden')
+        if (currentTrending == 0) {
+            trendingMoviesBox.children[0].classList.replace('visible', 'hidden');
         }
     }
 }

@@ -109,7 +109,7 @@ body{
 }
 
 .filme {
-    width: 100%;
+    width: 100vw;
     height: 70vh;
     background-repeat: no-repeat;
     background-size: cover;
