@@ -21,7 +21,6 @@ var width = body.offsetWidth;
 var height = body.offsetHeight;
 var ms = 0;
 var currentSuggestion = 0;
-var currentTrending = 0;
 const trending = document.getElementById('trending');
 const trendingMovies = document.getElementById('trendingMovies');
 const trendingMoviesBox = document.getElementById('trendingMoviesBox');
@@ -35,7 +34,6 @@ previous.forEach((btn) => {
 });
 trendingMoviesBox.addEventListener('mouseenter', hoverEnter);
 trendingMoviesBox.addEventListener('mouseleave', hoverLeave);
-var currentTrendingTranslate = 0;
 var resultsImgs = [];
 
 async function main() {
@@ -114,6 +112,8 @@ async function main() {
             `;
             div.appendChild(divMovies);
         }
+        trendingMovies.dataset.currentCount = "0"
+        trendingMovies.dataset.currentTranslate = "0"
         trendingMovies.appendChild(div);
     }
 
@@ -127,28 +127,30 @@ async function main() {
 
 function nextAction(event) {
     if (event.target.innerHTML != ' arrow_forward_ios ') {
-        var partitions = document.querySelectorAll(`.${event.target.parentElement.children[1].children[0].classList[0]}`);
-        if (currentTrending < partitions.length - 1) {
-            currentTrendingTranslate -= (80 / 100) * window.innerWidth + (event.target.parentElement.parentElement.offsetWidth - 4 * document.querySelector('.movie').offsetWidth) / 3;
-            event.target.parentElement.children[1].style.transform = `translateX(${currentTrendingTranslate}px)`;
-            currentTrending++;
-            if (currentTrending > 0) {
+        let divInfo = event.target.parentElement.children[1]
+        var partitions = document.querySelectorAll(`.${divInfo.children[0].classList[0]}`);
+        if (divInfo.dataset.currentCount < partitions.length - 1) {
+            divInfo.dataset.currentTranslate -= (80 / 100) * window.innerWidth + (event.target.parentElement.parentElement.offsetWidth - 4 * document.querySelector('.movie').offsetWidth) / 3;
+            divInfo.style.transform = `translateX(${divInfo.dataset.currentTranslate}px)`;
+            divInfo.dataset.currentCount++
+            if (divInfo.dataset.currentCount > 0) {
                 event.target.parentElement.children[0].classList.replace('hidden', 'visible');
             }
-            if (currentTrending == partitions.length - 1) {
+            if (divInfo.dataset.currentCount == partitions.length - 1) {
                 event.target.parentElement.children[2].classList.replace('visible', 'hidden');
             }
         }
     } else {
-        var partitions = document.querySelectorAll(`.${event.target.parentElement.parentElement.children[1].children[0].classList[0]}`);
-        if (currentTrending < partitions.length - 1) {
-            currentTrendingTranslate -= (80 / 100) * window.innerWidth + (event.target.parentElement.parentElement.parentElement.offsetWidth - 4 * document.querySelector('.movie').offsetWidth) / 3;
-            event.target.parentElement.parentElement.children[1].style.transform = `translateX(${currentTrendingTranslate}px)`;
-            currentTrending++;
-            if (currentTrending > 0) {
+        let divInfo = event.target.parentElement.parentElement.children[1]
+        var partitions = document.querySelectorAll(`.${divInfo.children[0].classList[0]}`);
+        if (divInfo.dataset.currentCount < partitions.length - 1) {
+            divInfo.dataset.currentTranslate -= (80 / 100) * window.innerWidth + (event.target.parentElement.parentElement.parentElement.offsetWidth - 4 * document.querySelector('.movie').offsetWidth) / 3;
+            divInfo.style.transform = `translateX(${divInfo.dataset.currentTranslate}px)`;
+            divInfo.dataset.currentCount++;
+            if (divInfo.dataset.currentCount > 0) {
                 event.target.parentElement.parentElement.children[0].classList.replace('hidden', 'visible');
             }
-            if (currentTrending == partitions.length - 1) {
+            if (divInfo.dataset.currentCount == partitions.length - 1) {
                 event.target.parentElement.parentElement.children[2].classList.replace('visible', 'hidden');
             }
         }
@@ -157,37 +159,40 @@ function nextAction(event) {
 
 function previousAction(event) {
     if (event.target.innerHTML != ' arrow_back_ios ') {
-        var partitions = document.querySelectorAll(`.${event.target.parentElement.children[1].children[0].classList[0]}`);
-        if (currentTrending > 0) {
-            currentTrendingTranslate += (80 / 100) * window.innerWidth + (event.target.parentElement.parentElement.offsetWidth - 4 * document.querySelector('.movie').offsetWidth) / 3;
-            event.target.parentElement.children[1].style.transform = `translateX(${currentTrendingTranslate}px)`;
-            currentTrending--;
-            if (currentTrending < partitions.length - 1) {
+        let divInfo = event.target.parentElement.children[1]
+        var partitions = document.querySelectorAll(`.${divInfo.children[0].classList[0]}`);
+        if (divInfo.dataset.currentCount > 0) {
+            divInfo.dataset.currentTranslate = parseInt(divInfo.dataset.currentTranslate) + parseInt((80 / 100) * window.innerWidth + (event.target.parentElement.parentElement.offsetWidth - 4 * document.querySelector('.movie').offsetWidth) / 3);
+            divInfo.style.transform = `translateX(${divInfo.dataset.currentTranslate}px)`;
+            divInfo.dataset.currentCount--;
+            if (divInfo.dataset.currentCount < partitions.length - 1) {
                 event.target.parentElement.children[2].classList.replace('hidden', 'visible');
             }
-            if (currentTrending == 0) {
+            if (divInfo.dataset.currentCount == 0) {
                 event.target.parentElement.children[0].classList.replace('visible', 'hidden');
             }
         }
     } else {
-        var partitions = document.querySelectorAll(`.${event.target.parentElement.parentElement.children[1].children[0].classList[0]}`);
-        currentTrendingTranslate += (80 / 100) * window.innerWidth + (event.target.parentElement.parentElement.parentElement.offsetWidth - 4 * document.querySelector('.movie').offsetWidth) / 3;
-        event.target.parentElement.parentElement.children[1].style.transform = `translateX(${currentTrendingTranslate}px)`;
-        currentTrending--;
-        if (currentTrending < partitions.length - 1) {
+        let divInfo = event.target.parentElement.parentElement.children[1]
+        console.log(divInfo)
+        var partitions = document.querySelectorAll(`.${divInfo.children[0].classList[0]}`);
+        divInfo.dataset.currentTranslate = parseInt(divInfo.dataset.currentTranslate) + parseInt((80 / 100) * window.innerWidth + (event.target.parentElement.parentElement.parentElement.offsetWidth - 4 * document.querySelector('.movie').offsetWidth) / 3);
+        divInfo.style.transform = `translateX(${divInfo.dataset.currentTranslate}px)`;
+        divInfo.dataset.currentCount--;
+        if (divInfo.dataset.currentCount < partitions.length - 1) {
             event.target.parentElement.parentElement.children[2].classList.replace('hidden', 'visible');
         }
-        if (currentTrending == 0) {
+        if (divInfo.dataset.currentCount == 0) {
             event.target.parentElement.parentElement.children[0].classList.replace('visible', 'hidden');
         }
     }
 }
 
 function hoverEnter(event) {
-    if (currentTrending != 0) {
+    if (event.target.children[1].dataset.currentCount != 0) {
         event.target.children[0].classList.replace('hidden', 'visible');
     }
-    if (currentTrending < event.target.children[1].children.length - 1) {
+    if (event.target.children[1].dataset.currentCount < event.target.children[1].children.length - 1) {
         event.target.children[2].classList.replace('hidden', 'visible');
     }
 }
@@ -199,7 +204,7 @@ function hoverLeave(event) {
 
 function openR(event) {
     movieId = event.target.dataset.id;
-    site = 'assistirFilmes.html?id=' + movieId; /* aaaaaa */
+    site = 'assistirFilmes.html?id=' + movieId;
     window.location.href = site;
 }
 
