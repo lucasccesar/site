@@ -30,20 +30,18 @@ next.forEach((btn) => {
     btn.addEventListener('click', nextAction);
 });
 var previous = document.querySelectorAll('.previous');
-console.log(previous);
 previous.forEach((btn) => {
     btn.addEventListener('click', previousAction);
 });
 trendingMoviesBox.addEventListener('mouseenter', hoverEnter);
 trendingMoviesBox.addEventListener('mouseleave', hoverLeave);
 var currentTrendingTranslate = 0;
-var resultsImgs = []
+var resultsImgs = [];
 
 async function main() {
     var discover = await fetch(`${API_URL}`, options).then((response) => response.json());
     var trendingObj = await fetch(`${API_URL}`, options).then((response) => response.json());
     var trendingResults = trendingObj.results;
-    console.log(trendingResults.length / 4);
     var discoverOrder = discover.results.sort((a, b) => Number(b.vote_count) - Number(a.vote_count));
     for (let i = discoverOrder.length; i > 4; i--) {
         discoverOrder.pop();
@@ -97,16 +95,16 @@ async function main() {
         for (let j = 0; j < 4; j++) {
             let divMovies = document.createElement('div');
             divMovies.classList.add('movie');
-            let movieImgCount = 0
+            let movieImgCount = 0;
             let movieImg = await fetch(`https://api.themoviedb.org/3/movie/${trendingResults[j + i * 4].id}/images`, options).then((response) => response.json());
-            for(let i = 0; i < movieImg.backdrops.length; i ++){
-                if(movieImg.backdrops[i].iso_639_1 == 'en' && movieImgCount == 0){
-                    movieImgCount = 1
-                    movieImgPath = movieImg.backdrops[i].file_path
+            for (let i = 0; i < movieImg.backdrops.length; i++) {
+                if (movieImg.backdrops[i].iso_639_1 == 'en' && movieImgCount == 0) {
+                    movieImgCount = 1;
+                    movieImgPath = movieImg.backdrops[i].file_path;
                 }
             }
-            if(movieImgCount == 0){
-                movieImgPath = movieImg.backdrops[0].file_path
+            if (movieImgCount == 0) {
+                movieImgPath = movieImg.backdrops[0].file_path;
             }
             divMovies.innerHTML = `
             <div class="movieBackdrop" style="background-image: url('${IMG_URL + movieImgPath}')"></div>
@@ -120,43 +118,67 @@ async function main() {
     }
 
     var btns = document.querySelectorAll('.btnWatch');
-    console.log(btns);
     btns.forEach((btn) => {
         btn.addEventListener('click', openR);
     });
 
-    setInterval(suggestion, 1);
+    setInterval(constant, 1);
 }
 
 function nextAction(event) {
-    var trendingPartitions = document.querySelectorAll('.trendingPartitions');
-    if (currentTrending < trendingPartitions.length - 1) {
-        currentTrendingTranslate -= (80 / 100) * window.innerWidth + (trending.offsetWidth - 4 * document.querySelector('.movie').offsetWidth) / 3;
-        console.log(currentTrendingTranslate);
-        trendingMovies.style.transform = `translateX(${currentTrendingTranslate}px)`;
-        currentTrending++;
-        if (currentTrending > 0) {
-            trendingMoviesBox.children[0].classList.replace('hidden', 'visible');
+    if (event.target.innerHTML != ' arrow_forward_ios ') {
+        var partitions = document.querySelectorAll(`.${event.target.parentElement.children[1].children[0].classList[0]}`);
+        if (currentTrending < partitions.length - 1) {
+            currentTrendingTranslate -= (80 / 100) * window.innerWidth + (event.target.parentElement.parentElement.offsetWidth - 4 * document.querySelector('.movie').offsetWidth) / 3;
+            event.target.parentElement.children[1].style.transform = `translateX(${currentTrendingTranslate}px)`;
+            currentTrending++;
+            if (currentTrending > 0) {
+                event.target.parentElement.children[0].classList.replace('hidden', 'visible');
+            }
+            if (currentTrending == partitions.length - 1) {
+                event.target.parentElement.children[2].classList.replace('visible', 'hidden');
+            }
         }
-        if (currentTrending == trendingPartitions.length - 1) {
-            trendingMoviesBox.children[2].classList.replace('visible', 'hidden');
+    } else {
+        var partitions = document.querySelectorAll(`.${event.target.parentElement.parentElement.children[1].children[0].classList[0]}`);
+        if (currentTrending < partitions.length - 1) {
+            currentTrendingTranslate -= (80 / 100) * window.innerWidth + (event.target.parentElement.parentElement.parentElement.offsetWidth - 4 * document.querySelector('.movie').offsetWidth) / 3;
+            event.target.parentElement.parentElement.children[1].style.transform = `translateX(${currentTrendingTranslate}px)`;
+            currentTrending++;
+            if (currentTrending > 0) {
+                event.target.parentElement.parentElement.children[0].classList.replace('hidden', 'visible');
+            }
+            if (currentTrending == partitions.length - 1) {
+                event.target.parentElement.parentElement.children[2].classList.replace('visible', 'hidden');
+            }
         }
     }
 }
 
 function previousAction(event) {
-    var trendingPartitions = document.querySelectorAll('.trendingPartitions');
-    if (currentTrending > 0) {
-        currentTrendingTranslate += (80 / 100) * window.innerWidth + (trending.offsetWidth - 4 * document.querySelector('.movie').offsetWidth) / 3;
-        console.log(currentTrendingTranslate);
-        trendingMovies.style.transform = `translateX(${currentTrendingTranslate}px)`;
+    if (event.target.innerHTML != ' arrow_back_ios ') {
+        var partitions = document.querySelectorAll(`.${event.target.parentElement.children[1].children[0].classList[0]}`);
+        if (currentTrending > 0) {
+            currentTrendingTranslate += (80 / 100) * window.innerWidth + (event.target.parentElement.parentElement.offsetWidth - 4 * document.querySelector('.movie').offsetWidth) / 3;
+            event.target.parentElement.children[1].style.transform = `translateX(${currentTrendingTranslate}px)`;
+            currentTrending--;
+            if (currentTrending < partitions.length - 1) {
+                event.target.parentElement.children[2].classList.replace('hidden', 'visible');
+            }
+            if (currentTrending == 0) {
+                event.target.parentElement.children[0].classList.replace('visible', 'hidden');
+            }
+        }
+    } else {
+        var partitions = document.querySelectorAll(`.${event.target.parentElement.parentElement.children[1].children[0].classList[0]}`);
+        currentTrendingTranslate += (80 / 100) * window.innerWidth + (event.target.parentElement.parentElement.parentElement.offsetWidth - 4 * document.querySelector('.movie').offsetWidth) / 3;
+        event.target.parentElement.parentElement.children[1].style.transform = `translateX(${currentTrendingTranslate}px)`;
         currentTrending--;
-        console.log(currentTrending);
-        if (currentTrending < trendingPartitions.length - 1) {
-            trendingMoviesBox.children[2].classList.replace('hidden', 'visible');
+        if (currentTrending < partitions.length - 1) {
+            event.target.parentElement.parentElement.children[2].classList.replace('hidden', 'visible');
         }
         if (currentTrending == 0) {
-            trendingMoviesBox.children[0].classList.replace('visible', 'hidden');
+            event.target.parentElement.parentElement.children[0].classList.replace('visible', 'hidden');
         }
     }
 }
@@ -168,7 +190,6 @@ function hoverEnter(event) {
     if (currentTrending < event.target.children[1].children.length - 1) {
         event.target.children[2].classList.replace('hidden', 'visible');
     }
-    console.log(event.target.children[1].children.length);
 }
 
 function hoverLeave(event) {
@@ -177,41 +198,12 @@ function hoverLeave(event) {
 }
 
 function openR(event) {
-    console.log(event.target.dataset.id);
     movieId = event.target.dataset.id;
     site = 'assistirFilmes.html?id=' + movieId; /* aaaaaa */
     window.location.href = site;
 }
 
-async function mudar(event) {
-    const fundos = document.querySelectorAll('.fundo');
-    console.log(fundos);
-    let loading = document.querySelector('.btnLoading');
-    console.log(event);
-    console.log(event.target.classList);
-    if (event.target.firstElementChild != null && event.target.firstElementChild.classList[0] != 'btnLoading') {
-        for (let i = 0; i < 4; i++) {
-            if (event.target == btns[i] || event.target.parentElement == btns[i]) {
-                movies.classList.add('delay');
-                movies.style.transform = `translateX(-${width * i}px)`;
-                currentSuggestion = i;
-            }
-            if (event.target == btns[i]) {
-                event.target.firstElementChild.classList.add('btnLoading');
-                loading.classList.remove('btnLoading');
-                ms = 0;
-            } else if (event.target.parentElement == btns[i]) {
-                event.target.classList.add('btnLoading');
-                loading.classList.remove('btnLoading');
-                ms = 0;
-            }
-        }
-    } else if (event.target.classList[0] == 'btnLoading' || event.target.firstElementChild.classList[0] == 'btnLoading') {
-        ms = 0;
-    }
-}
-
-function suggestion() {
+function constant() {
     width = body.offsetWidth;
     let movieSla = movies.getBoundingClientRect();
     trendingMovies.style.gap = `${(trending.offsetWidth - 4 * document.querySelector('.movie').offsetWidth) / 3}px`;
@@ -234,6 +226,31 @@ function suggestion() {
     }
 }
 
+async function mudar(event) {
+    const fundos = document.querySelectorAll('.fundo');
+    let loading = document.querySelector('.btnLoading');
+    if (event.target.firstElementChild != null && event.target.firstElementChild.classList[0] != 'btnLoading') {
+        for (let i = 0; i < 4; i++) {
+            if (event.target == btns[i] || event.target.parentElement == btns[i]) {
+                movies.classList.add('delay');
+                movies.style.transform = `translateX(-${width * i}px)`;
+                currentSuggestion = i;
+            }
+            if (event.target == btns[i]) {
+                event.target.firstElementChild.classList.add('btnLoading');
+                loading.classList.remove('btnLoading');
+                ms = 0;
+            } else if (event.target.parentElement == btns[i]) {
+                event.target.classList.add('btnLoading');
+                loading.classList.remove('btnLoading');
+                ms = 0;
+            }
+        }
+    } else if (event.target.classList[0] == 'btnLoading' || event.target.firstElementChild.classList[0] == 'btnLoading') {
+        ms = 0;
+    }
+}
+
 function trocar() {
     const fundos = document.querySelectorAll('.fundo');
     currentSuggestion++;
@@ -242,11 +259,9 @@ function trocar() {
         btns[0].firstElementChild.classList.add('btnLoading');
         loading.classList.remove('btnLoading');
         movies.style.transform = `translateX(-${width * currentSuggestion}px)`;
-        console.log('trocou');
         currentSuggestion = 0;
     } else if (loading.parentElement.nextElementSibling != null) {
         movies.classList.add('delay');
-        console.log('aqui');
         loading.style.width = `0%`;
         loading.parentElement.nextElementSibling.firstElementChild.classList.add('btnLoading');
         loading.classList.remove('btnLoading');
