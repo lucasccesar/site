@@ -23,24 +23,17 @@ var ms = 0;
 var currentSuggestion = 0;
 const trending = document.getElementById('trending');
 const trendingMovies = document.getElementById('trendingMovies');
-const trendingMoviesBox = document.getElementById('trendingMoviesBox');
-var next = document.querySelectorAll('.next');
-next.forEach((btn) => {
-    btn.addEventListener('click', nextAction);
-});
-var previous = document.querySelectorAll('.previous');
-previous.forEach((btn) => {
-    btn.addEventListener('click', previousAction);
-});
-trendingMoviesBox.addEventListener('mouseenter', hoverEnter);
-trendingMoviesBox.addEventListener('mouseleave', hoverLeave);
 var resultsImgs = [];
+const genresArray = ['Action', 'Romance', 'Adventure', 'Family', 'Comedy', 'Science Fiction'];
 
 async function main() {
     var discover = await fetch(`${API_URL}`, options).then((response) => response.json());
     var trendingObj = await fetch(`${API_URL}`, options).then((response) => response.json());
     var trendingResults = trendingObj.results;
     var discoverOrder = discover.results.sort((a, b) => Number(b.vote_count) - Number(a.vote_count));
+    var genresObject = await fetch('https://api.themoviedb.org/3/genre/movie/list?language=en', options).then((response) => response.json());
+    var genresObjectResults = genresObject.genres;
+
     for (let i = discoverOrder.length; i > 4; i--) {
         discoverOrder.pop();
     }
@@ -86,9 +79,9 @@ async function main() {
 
     for (let i = 0; i < trendingResults.length / 4; i++) {
         let div = document.createElement('div');
-        div.classList.add('trendingPartitions');
+        div.classList.add('partitions');
         if (i == 0) {
-            div.classList.add('trendingPartitionsFirst');
+            div.classList.add('partitionsFirst');
         }
         for (let j = 0; j < 4; j++) {
             let divMovies = document.createElement('div');
@@ -112,27 +105,107 @@ async function main() {
             `;
             div.appendChild(divMovies);
         }
-        trendingMovies.dataset.currentCount = "0"
-        trendingMovies.dataset.currentTranslate = "0"
+        trendingMovies.dataset.currentCount = '0';
+        trendingMovies.dataset.currentTranslate = '0';
         trendingMovies.appendChild(div);
     }
+
+    Object.keys(genresObjectResults).forEach(function (key) {
+        let divGenre = document.createElement('div');
+        divGenre.classList.add('genres');
+        divGenre.innerHTML = `
+        <div class="genresUpper">
+            <p class="centerText">
+                ${genresObjectResults[key].name} <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M6.75 21.5q-.525-.525-.525-1.288 0-.762.525-1.287L13.675 12l-6.95-6.95q-.525-.525-.537-1.275-.013-.75.537-1.3.525-.525 1.287-.525.763 0 1.288.525l8.425 8.425q.225.225.337.512.113.288.113.588t-.113.587q-.112.288-.337.513L9.3 21.525q-.525.525-1.262.525-.738 0-1.288-.55Z" /></svg>
+            </p>
+            <div class="pageCount">
+                <div class="pageCounts selecionada"></div>
+                <div class="pageCounts"></div>
+                <div class="pageCounts"></div>
+                <div class="pageCounts"></div>
+                <div class="pageCounts"></div>
+            </div>
+        </div>
+        <div class="genresLower">
+            <button class="pass previous hidden"><span class="material-symbols-rounded" style="font-size: 70px"> arrow_back_ios </span></button>
+            <div data-genre="${genresObject.genres[key].name}" class="genresMovies"></div>
+            <button class="pass next hidden"><span class="material-symbols-rounded" style="font-size: 70px"> arrow_forward_ios </span></button>
+        </div>
+        `;
+
+        lower.appendChild(divGenre);
+        let genresMovies = document.querySelectorAll('.genresMovies');
+        showMovies(genresObjectResults[key].name, key, genresMovies[parseInt(key) + 1], genresObjectResults[key].id);
+    });
 
     var btns = document.querySelectorAll('.btnWatch');
     btns.forEach((btn) => {
         btn.addEventListener('click', openR);
     });
 
+    let genresLower = document.querySelectorAll('.genresLower');
+    genresLower.forEach((e) => {
+        e.addEventListener('mouseenter', hoverEnter);
+        e.addEventListener('mouseleave', hoverLeave);
+    });
+
+    var next = document.querySelectorAll('.next');
+    next.forEach((btn) => {
+        btn.addEventListener('click', nextAction);
+    });
+    var previous = document.querySelectorAll('.previous');
+    previous.forEach((btn) => {
+        btn.addEventListener('click', previousAction);
+    });
+
     setInterval(constant, 1);
+}
+
+async function showMovies(genre, index, element, genreId) {
+    let resultsObj = await fetch(`https://api.themoviedb.org/3/discover/movie?sort_by=vote_count.desc&with_genres=${genreId}`, options).then((response) => response.json());
+    let results = resultsObj.results;
+    for (let i = 0; i < results.length / 4; i++) {
+        let div = document.createElement('div');
+        div.classList.add('partitions');
+        if (i == 0) {
+            div.classList.add('partitionsFirst');
+        }
+        for (let j = 0; j < 4; j++) {
+            let divMovies = document.createElement('div');
+            divMovies.classList.add('movie');
+            let movieImgCount = 0;
+            let movieImg = await fetch(`https://api.themoviedb.org/3/movie/${results[j + i * 4].id}/images`, options).then((response) => response.json());
+            for (let i = 0; i < movieImg.backdrops.length; i++) {
+                if (movieImg.backdrops[i].iso_639_1 == 'en' && movieImgCount == 0) {
+                    movieImgCount = 1;
+                    movieImgPath = movieImg.backdrops[i].file_path;
+                }
+            }
+            if (movieImgCount == 0) {
+                movieImgPath = movieImg.backdrops[0].file_path;
+            }
+            divMovies.innerHTML = `
+            <div class="movieBackdrop" style="background-image: url('${IMG_URL + movieImgPath}')"></div>
+            <div class="movieInfo"><p class="title">${
+                results[j + i * 4].title
+            }</p><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#ffffff}</style><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg></div>
+            `;
+            div.appendChild(divMovies);
+        }
+        element.dataset.currentCount = '0';
+        element.dataset.currentTranslate = '0';
+        element.appendChild(div);
+    }
 }
 
 function nextAction(event) {
     if (event.target.innerHTML != ' arrow_forward_ios ') {
-        let divInfo = event.target.parentElement.children[1]
+        let divInfo = event.target.parentElement.children[1];
         var partitions = document.querySelectorAll(`.${divInfo.children[0].classList[0]}`);
         if (divInfo.dataset.currentCount < partitions.length - 1) {
             divInfo.dataset.currentTranslate -= (80 / 100) * window.innerWidth + (event.target.parentElement.parentElement.offsetWidth - 4 * document.querySelector('.movie').offsetWidth) / 3;
             divInfo.style.transform = `translateX(${divInfo.dataset.currentTranslate}px)`;
-            divInfo.dataset.currentCount++
+            divInfo.dataset.currentCount++;
             if (divInfo.dataset.currentCount > 0) {
                 event.target.parentElement.children[0].classList.replace('hidden', 'visible');
             }
@@ -140,8 +213,10 @@ function nextAction(event) {
                 event.target.parentElement.children[2].classList.replace('visible', 'hidden');
             }
         }
+        event.target.parentElement.parentElement.firstElementChild.lastElementChild.children[divInfo.dataset.currentCount - 1].classList.remove('selecionada');
+        event.target.parentElement.parentElement.firstElementChild.lastElementChild.children[divInfo.dataset.currentCount].classList.add('selecionada');
     } else {
-        let divInfo = event.target.parentElement.parentElement.children[1]
+        let divInfo = event.target.parentElement.parentElement.children[1];
         var partitions = document.querySelectorAll(`.${divInfo.children[0].classList[0]}`);
         if (divInfo.dataset.currentCount < partitions.length - 1) {
             divInfo.dataset.currentTranslate -= (80 / 100) * window.innerWidth + (event.target.parentElement.parentElement.parentElement.offsetWidth - 4 * document.querySelector('.movie').offsetWidth) / 3;
@@ -154,12 +229,14 @@ function nextAction(event) {
                 event.target.parentElement.parentElement.children[2].classList.replace('visible', 'hidden');
             }
         }
+        event.target.parentElement.parentElement.parentElement.firstElementChild.lastElementChild.children[parseInt(divInfo.dataset.currentCount) - 1].classList.remove('selecionada');
+        event.target.parentElement.parentElement.parentElement.firstElementChild.lastElementChild.children[divInfo.dataset.currentCount].classList.add('selecionada');
     }
 }
 
 function previousAction(event) {
     if (event.target.innerHTML != ' arrow_back_ios ') {
-        let divInfo = event.target.parentElement.children[1]
+        let divInfo = event.target.parentElement.children[1];
         var partitions = document.querySelectorAll(`.${divInfo.children[0].classList[0]}`);
         if (divInfo.dataset.currentCount > 0) {
             divInfo.dataset.currentTranslate = parseInt(divInfo.dataset.currentTranslate) + parseInt((80 / 100) * window.innerWidth + (event.target.parentElement.parentElement.offsetWidth - 4 * document.querySelector('.movie').offsetWidth) / 3);
@@ -172,9 +249,10 @@ function previousAction(event) {
                 event.target.parentElement.children[0].classList.replace('visible', 'hidden');
             }
         }
+        event.target.parentElement.parentElement.firstElementChild.lastElementChild.children[parseInt(divInfo.dataset.currentCount) + 1].classList.remove('selecionada');
+        event.target.parentElement.parentElement.firstElementChild.lastElementChild.children[divInfo.dataset.currentCount].classList.add('selecionada');
     } else {
-        let divInfo = event.target.parentElement.parentElement.children[1]
-        console.log(divInfo)
+        let divInfo = event.target.parentElement.parentElement.children[1];
         var partitions = document.querySelectorAll(`.${divInfo.children[0].classList[0]}`);
         divInfo.dataset.currentTranslate = parseInt(divInfo.dataset.currentTranslate) + parseInt((80 / 100) * window.innerWidth + (event.target.parentElement.parentElement.parentElement.offsetWidth - 4 * document.querySelector('.movie').offsetWidth) / 3);
         divInfo.style.transform = `translateX(${divInfo.dataset.currentTranslate}px)`;
@@ -185,6 +263,8 @@ function previousAction(event) {
         if (divInfo.dataset.currentCount == 0) {
             event.target.parentElement.parentElement.children[0].classList.replace('visible', 'hidden');
         }
+        event.target.parentElement.parentElement.parentElement.firstElementChild.lastElementChild.children[parseInt(divInfo.dataset.currentCount) + 1].classList.remove('selecionada');
+        event.target.parentElement.parentElement.parentElement.firstElementChild.lastElementChild.children[divInfo.dataset.currentCount].classList.add('selecionada');
     }
 }
 
@@ -215,6 +295,12 @@ function constant() {
     document.querySelectorAll('.pass').forEach((btn) => {
         btn.style.width = `${(10 / 100) * window.innerWidth - (trending.offsetWidth - 4 * document.querySelector('.movie').offsetWidth) / 3}px`;
     });
+
+    let genresMoviesQuery = document.querySelectorAll('.genresMovies')
+    genresMoviesQuery.forEach(e => {
+        e.style.gap = `${(trending.offsetWidth - 4 * document.querySelector('.movie').offsetWidth) / 3}px`;
+    });
+
     if (movieSla.left == -(width * 4)) {
         let loading = document.querySelector('.btnLoading');
         movies.classList.remove('delay');
