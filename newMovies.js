@@ -35,6 +35,7 @@ previous.forEach((btn) => {
 trendingMoviesBox.addEventListener('mouseenter', hoverEnter);
 trendingMoviesBox.addEventListener('mouseleave', hoverLeave);
 var resultsImgs = [];
+const genres = ["action", "romance", "adventure", "family", "horror", "comedy", "Science Fiction"]
 
 async function main() {
     var discover = await fetch(`${API_URL}`, options).then((response) => response.json());
@@ -140,6 +141,8 @@ function nextAction(event) {
                 event.target.parentElement.children[2].classList.replace('visible', 'hidden');
             }
         }
+        event.target.parentElement.previousElementSibling.lastElementChild.children[divInfo.dataset.currentCount-1].classList.remove("selecionada")
+        event.target.parentElement.previousElementSibling.lastElementChild.children[divInfo.dataset.currentCount].classList.add("selecionada")
     } else {
         let divInfo = event.target.parentElement.parentElement.children[1]
         var partitions = document.querySelectorAll(`.${divInfo.children[0].classList[0]}`);
@@ -154,6 +157,8 @@ function nextAction(event) {
                 event.target.parentElement.parentElement.children[2].classList.replace('visible', 'hidden');
             }
         }
+        event.target.parentElement.parentElement.previousElementSibling.lastElementChild.children[divInfo.dataset.currentCount-1].classList.remove("selecionada")
+        event.target.parentElement.parentElement.previousElementSibling.lastElementChild.children[divInfo.dataset.currentCount].classList.add("selecionada")
     }
 }
 
@@ -172,6 +177,8 @@ function previousAction(event) {
                 event.target.parentElement.children[0].classList.replace('visible', 'hidden');
             }
         }
+        event.target.parentElement.previousElementSibling.lastElementChild.children[parseInt(divInfo.dataset.currentCount)+1].classList.remove("selecionada")
+        event.target.parentElement.previousElementSibling.lastElementChild.children[parseInt(divInfo.dataset.currentCount)].classList.add("selecionada")
     } else {
         let divInfo = event.target.parentElement.parentElement.children[1]
         console.log(divInfo)
@@ -185,6 +192,8 @@ function previousAction(event) {
         if (divInfo.dataset.currentCount == 0) {
             event.target.parentElement.parentElement.children[0].classList.replace('visible', 'hidden');
         }
+        event.target.parentElement.parentElement.previousElementSibling.lastElementChild.children[parseInt(divInfo.dataset.currentCount)+1].classList.remove("selecionada")
+        event.target.parentElement.parentElement.previousElementSibling.lastElementChild.children[parseInt(divInfo.dataset.currentCount)].classList.add("selecionada")
     }
 }
 
