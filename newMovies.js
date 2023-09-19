@@ -116,7 +116,8 @@ async function main() {
         divGenre.classList.add('genres');
         divGenre.innerHTML = `
         <div class="genresUpper">
-            <div class="genreDiv">
+        <div class="genreDiv">
+            <div class="genreAbsolute" data-genre-id="${genresObject.genres[key].id}" data-genre-name="${genresObject.genres[key].name}"></div>
                 <p class="centerText">${genresObjectResults[key].name} <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M6.75 21.5q-.525-.525-.525-1.288 0-.762.525-1.287L13.675 12l-6.95-6.95q-.525-.525-.537-1.275-.013-.75.537-1.3.525-.525 1.287-.525.763 0 1.288.525l8.425 8.425q.225.225.337.512.113.288.113.588t-.113.587q-.112.288-.337.513L9.3 21.525q-.525.525-1.262.525-.738 0-1.288-.55Z" /></svg>
                 <div class="genreBar"></div>
             </div>
@@ -166,13 +167,21 @@ async function main() {
         movie.addEventListener('click', openR)
     });
 
-    var genreDiv = document.querySelectorAll(".genreDiv")
-    genreDiv.forEach(element => {
+    var genreAbsolute = document.querySelectorAll(".genreAbsolute")
+    genreAbsolute.forEach(element => {
         element.addEventListener("mouseenter", hoverGenre)
         element.addEventListener("mouseleave", leaveGenre)
+        element.addEventListener("click", openGenre)
     });
 
     setInterval(constant, 1);
+}
+
+function openGenre(event){
+    let genreId = event.target.dataset.genreId;
+    let genreName = event.target.dataset.genreName;
+    site = 'genre.html?id=' + genreId +"&type=movie" + "&genre=" + genreName;
+    window.location.href = site;
 }
 
 async function showMovies(genre, index, element, genreId) {
@@ -215,11 +224,11 @@ async function showMovies(genre, index, element, genreId) {
 }
 
 function hoverGenre(event){
-    event.target.lastElementChild.style.width = "100%"
+    event.target.parentElement.lastElementChild.style.width = "100%"
 }
 
 function leaveGenre(event){
-    event.target.lastElementChild.style.width = "0px"
+    event.target.parentElement.lastElementChild.style.width = "0px"
 }
 
 function nextAction(event) {
