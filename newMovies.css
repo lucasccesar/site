@@ -126,7 +126,11 @@ body{
     margin-top: 60px;
 }
 
-#trendingMoviesBox {
+.genres{
+    margin-top: 50px;
+}
+
+.genresLower {
     display: flex;
     position: relative;
     left: 50%;
@@ -160,28 +164,37 @@ body{
     gap: 5px;
 }
 
-#trendingMoviesBox > .previous{
+.genreDiv{
+    cursor: pointer;
+}
+
+.genreBar{
+    height: 3px;
+    width: 0px;
+    background-color: white;
+    transition: 150ms;
+}
+
+.previous{
     position: absolute;
     height: 100%;
     left: 0;
     border-radius: 0px 10px 10px 0px;
 }
 
-#trendingMoviesBox > .next{
+.next{
     position: absolute;
     height: 100%;
     right: 0;
     border-radius: 10px 0px 0px 10px;
 }
 
-
-
-#trending p {
+.genres p {
     font-size: 30px;
     font-weight: bold;
 }
 
-#trendingNow {
+.genresUpper {
     display: flex;
     width: 100%;
     justify-content: space-between;
@@ -226,13 +239,13 @@ body{
     gap: 5px;
 }
 
-.trendingPartitions {
+.partitions {
     display: flex;
     justify-content: space-between;
     width: 80vw;
 }
 
-#trendingMovies {
+.genresMovies {
     transition: 1s;
     display: flex;
     margin-left: 10vw;
@@ -240,6 +253,7 @@ body{
 
 .movie{
     width: min-content;
+    cursor: pointer;
 }
 
 .movieInfo{
@@ -259,7 +273,7 @@ body{
     border-radius: 10px;
 }
 
-#trendingMovies p {
+.genresMovies p {
     font-size: 22px;
     font-weight: normal;
 }
